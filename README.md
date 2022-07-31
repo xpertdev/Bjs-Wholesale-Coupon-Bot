@@ -14,8 +14,8 @@ function sleep(t) {
 }
 
 var interval = setInterval(function(){
-    var buttons = $("button.red-btn:contains('CLIP')");
-    var nextLink = $("span.next:contains('Next')");
+    var buttons = $("button.next-prev:contains('CLIP')");
+    var nextLink = $("button.next-prev:contains('Next')");
     var btn = $(buttons.splice(0, 1));
     console.log("Clicking: " + buttons.length + " ", btn);
     btn.trigger( "click" );
@@ -26,6 +26,6 @@ var interval = setInterval(function(){
         nextLink.trigger( "click" );
         sleep(3000);
     }
-}, 500);
+}, 3000);
     
 ```    

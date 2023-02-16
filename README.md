@@ -29,3 +29,5 @@ var interval = setInterval(function(){
 }, 3000);
     
 ```    
+
+You may need to run this more than once (press the up arrow in the console, and Enter again.)

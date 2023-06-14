@@ -14,18 +14,22 @@ function sleep(t) {
 }
 
 var interval = setInterval(function(){
-    var buttons = $("button.next-prev:contains('CLIP')");
-    var nextLink = $("button.next-prev:contains('Next')");
-    var btn = $(buttons.splice(0, 1));
-    console.log("Clicking: " + buttons.length + " ", btn);
-    btn.trigger( "click" );
-    if (buttons.length === 0 && nextLink.length === 0 ) {
+	const buttons = document.getElementsByName('clipToCard');
+
+			
+	buttons.forEach(btn => {
+		console.log("Clicking: " + buttons.length + " ", btn);
+		btn.click();
+		btn.scrollIntoView({behavior:"smooth"});
+		buttons[btn].remove();
+		sleep(3000);
+	});
+
+    if (buttons.length === 0) {
         console.log("Done");
         clearInterval(interval);
-    } else if (buttons.length === 0) {
-        nextLink.trigger( "click" );
-        sleep(3000);
     }
+		
 }, 3000);
     
 ```    

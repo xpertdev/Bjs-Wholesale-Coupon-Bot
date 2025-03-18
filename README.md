@@ -13,9 +13,12 @@ An automated tool to clip all available coupons on your BJ's Wholesale account w
 4. Copy and paste one of the following options:
 
 ### Option 1: Direct GitHub Link
-Copy and paste this single line into your console:
+Copy and paste this into your console:
 ```javascript
-fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js').then(r => r.text()).then(code => eval(code));
+fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
+  .then(response => response.text())
+  .then(code => eval(code))
+  .catch(error => console.error('Error loading coupon bot:', error));
 ```
 
 ### Option 2: Copy Full Code

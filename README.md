@@ -1,37 +1,39 @@
-# Bjs-Wholesale-Coupon-Bot
+# BJs Wholesale Coupon Bot
 
-#### Instructions
+An automated tool to clip all available coupons on your BJ's Wholesale account with a single click.
 
-- Open https://www.bjs.com/myCoupons in Google Chrome / Microsoft Edge
-- Signin to your account
-- Run JavaScript in the console. Guide: https://developers.google.com/web/tools/chrome-devtools/console/javascript
+## Instructions
 
+1. Open https://www.bjs.com/myCoupons in Google Chrome or Microsoft Edge
+2. Sign in to your BJ's Wholesale account
+3. Open the browser console:
+   - Windows: Press F12 or right-click and select "Inspect", then click on "Console" tab
+   - Mac: Press Option+⌘+J (Chrome) or Option+⌘+I (Safari), then click on "Console" tab
+   - Guide: https://developers.google.com/web/tools/chrome-devtools/console/javascript
+4. Copy and paste one of the following options:
 
+### Option 1: Direct GitHub Link
+Copy and paste this into your console:
+```javascript
+fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
+  .then(response => response.text())
+  .then(code => eval(code))
+  .catch(error => console.error('Error loading coupon bot:', error));
 ```
-function sleep(t) {  
-  const start = Date.now();
-  while (Date.now() - start < t);
-}
 
-var interval = setInterval(function(){
-	const buttons = document.getElementsByName('clipToCard');
+### Option 2: Copy Full Code
+Copy the contents from the [coupon-bot.js](./coupon-bot.js) file and paste it into the console.
 
-			
-	buttons.forEach(btn => {
-		console.log("Clicking: " + buttons.length + " ", btn);
-		btn.click();
-		btn.scrollIntoView({behavior:"smooth"});
-		buttons[btn].remove();
-		sleep(3000);
-	});
+The bot will automatically:
+- Find all available coupons on the page
+- Click each "Clip" button one by one 
+- Scroll each coupon into view as it's clipped
+- Continue until all coupons are clipped or maximum attempts are reached
 
-    if (buttons.length === 0) {
-        console.log("Done");
-        clearInterval(interval);
-    }
-		
-}, 3000);
-    
-```    
+> **Note:** If some coupons remain unclipped after the script finishes, you may need to run it again. Simply press the up arrow in the console to recall the previous command and press Enter to execute it again.
 
-You may need to run this more than once (press the up arrow in the console, and Enter again.)
+## How It Works
+
+The script uses JavaScript to interact with the BJ's website, locating and clicking all coupon buttons. It includes error handling and will automatically retry if needed.
+
+No additional setup or installation is required - just copy, paste and run in the browser console!

@@ -7,7 +7,7 @@ An automated tool to clip all available coupons on your BJ's Wholesale account w
 1. Open https://www.bjs.com/myCoupons in your browser
 2. Sign in to your BJ's Wholesale account
 3. Open the browser console:
-   - **Chrome/Edge (Windows)**: Press F12 or right-click and select "Inspect", then click on "Console" tab
+   - **Chrome/Edge (Windows)**: Press F12 or Ctrl+Shift+I or right-click and select "Inspect", then click on "Console" tab
    - **Chrome/Edge (Mac)**: Press Option+⌘+J, then click on "Console" tab
    - **Safari**: Press Option+⌘+C (first enable Developer menu in Safari > Preferences > Advanced)
    - **Firefox**: Press F12 (Windows) or Option+⌘+K (Mac), then click on "Console" tab
@@ -46,3 +46,20 @@ The bot will automatically:
 The script uses cross-browser compatible JavaScript to interact with the BJ's website, locating and clicking all coupon buttons regardless of browser differences. It includes error handling, browser detection, and will automatically retry if needed.
 
 No additional setup or installation is required - just copy, paste and run in the browser console!
+
+## Why This Tool Exists
+
+Many grocery and wholesale club websites offer digital coupons, but the process of clipping these coupons is often frustrating. Ideally, digital coupons should be automatically applied at checkout, similar to Costco Wholesale, eliminating the need for manual clipping. However, due to poor user experience, this tool was created to address the following issues:
+
+- Manually clicking dozens (or even hundreds) of individual "clip" buttons is tedious and time-consuming.
+- Websites often load slowly between clicks, further complicating the process.
+- It's easy to overlook coupons that could save you money.
+
+This bot automates the entire process, saving you time and ensuring you don't miss out on any potential savings.
+
+## Supported Websites
+
+This tool is known to work on several sites including the following:
+
+- **BJ's Wholesale Club**: https://www.bjs.com/myCoupons
+- **Harris Teeter**: https://www.harristeeter.com/savings/cl/coupons/

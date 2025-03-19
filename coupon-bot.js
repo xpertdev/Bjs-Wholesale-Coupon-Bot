@@ -77,7 +77,7 @@
       // Try by class or text content - common fallback approaches
       buttons = Array.from(document.querySelectorAll('button')).filter(btn => {
         const text = btn.textContent.trim().toLowerCase();
-        return text === 'clip' || text.includes('clip coupon');
+        return text === 'clip' || text.includes('clip coupon') || text.includes('clip digital coupon');
       });
       
       // If still no results, try other common attributes

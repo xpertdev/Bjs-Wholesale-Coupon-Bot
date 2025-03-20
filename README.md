@@ -1,6 +1,6 @@
 # BJs Wholesale Coupon Bot
 
-An automated tool to clip all available coupons on your BJ's Wholesale account with a single click. Now compatible with Chrome, Edge, Safari, and Firefox.
+An automated tool to clip all available coupons on your BJ's Wholesale account with a single click.
 
 ## Instructions
 

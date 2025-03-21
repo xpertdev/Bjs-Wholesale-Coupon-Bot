@@ -2,6 +2,8 @@
 
 An automated tool to clip all available coupons on your BJ's Wholesale account with a single click.
 
+![Clip Coupons](clip-coupons.gif)
+
 ## Instructions
 
 1. Open https://www.bjs.com/myCoupons in your browser

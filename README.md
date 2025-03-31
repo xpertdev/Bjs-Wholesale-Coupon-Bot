@@ -17,8 +17,22 @@ An automated tool to clip all available coupons on your BJ's Wholesale account w
 4. Copy and paste one of the following options:
 
 ### Option 1: Direct GitHub Link
-Copy and paste this into your console:
+Copy and paste this into your console to run with default settings:
 ```javascript
+fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
+  .then(response => response.text())
+  .then(code => eval(code))
+  .catch(error => console.error('Error loading coupon bot:', error));
+```
+
+If you want to customize settings (for example, to make the bot run faster or slower), use this version:
+```javascript
+// Change any values you want to customize
+window.customConfig = {
+  baseDelay: 2000  // Try 5000 for slower connections or 2000 for faster clipping
+};
+
+// Run the bot with your custom settings
 fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
   .then(response => response.text())
   .then(code => eval(code))
@@ -45,9 +59,28 @@ The bot will automatically:
 
 ## How It Works
 
-The script uses cross-browser compatible JavaScript to interact with the BJ's website, locating and clicking all coupon buttons regardless of browser differences. It includes error handling, browser detection, and will automatically retry if needed.
+The script uses cross-browser compatible JavaScript to interact with coupon websites, locating and clicking all coupon buttons regardless of browser differences. It includes error handling, browser detection, and will automatically retry if needed.
 
 No additional setup or installation is required - just copy, paste and run in the browser console!
+
+## Configuration Options
+
+The script includes several configurable parameters that can be adjusted to optimize performance:
+
+```javascript
+const config = {
+  baseDelay: 3000,       // Base delay in milliseconds for Chrome/Edge (default: 3000ms)
+  firefoxDelay: 4000,    // Delay for Firefox (default: 4000ms)
+  safariDelay: 4000,     // Delay for Safari (default: 4000ms)
+  maxAttempts: 5,        // Default max attempts for Chrome/Edge/Firefox (default: 5)
+  safariMaxAttempts: 6   // Max attempts for Safari (default: 6)
+};
+```
+
+You can modify these values in the console before running the script if you need to:
+- Increase delays if the website is slow or coupons aren't clipping properly
+- Decrease delays if the website is responsive and you want faster clipping
+- Adjust max attempts based on how many coupons you typically need to process
 
 ## Why This Tool Exists
 

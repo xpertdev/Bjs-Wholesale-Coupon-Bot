@@ -29,7 +29,7 @@ If you want to customize settings (for example, to make the bot run faster or sl
 ```javascript
 // Change any values you want to customize
 window.customConfig = {
-  baseDelay: 2000  // Try 5000 for slower connections or 2000 for faster clipping (default: 1000ms)
+  baseDelay: 1800  // Sleep timeout in ms. Try 5000 for slower connections or 1000 for faster clipping (default: 1000ms).
 };
 
 // Run the bot with your custom settings

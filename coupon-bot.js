@@ -2,7 +2,7 @@
 (() => {
   // Default configuration parameters
   const defaultConfig = {
-    baseDelay: 800, // Base delay in milliseconds for Chrome/Edge
+    baseDelay: 1000, // Base delay in milliseconds for Chrome/Edge
     firefoxDelay: 1500, // Delay for Firefox
     safariDelay: 1500, // Delay for Safari
     maxAttempts: 5, // Default max attempts

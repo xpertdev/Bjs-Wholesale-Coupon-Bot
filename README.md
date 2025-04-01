@@ -29,7 +29,7 @@ If you want to customize settings (for example, to make the bot run faster or sl
 ```javascript
 // Change any values you want to customize
 window.customConfig = {
-  baseDelay: 2000  // Try 5000 for slower connections or 2000 for faster clipping
+  baseDelay: 2000  // Try 5000 for slower connections or 2000 for faster clipping (default: 1000ms)
 };
 
 // Run the bot with your custom settings
@@ -69,9 +69,9 @@ The script includes several configurable parameters that can be adjusted to opti
 
 ```javascript
 const config = {
-  baseDelay: 3000,       // Base delay in milliseconds for Chrome/Edge (default: 3000ms)
-  firefoxDelay: 4000,    // Delay for Firefox (default: 4000ms)
-  safariDelay: 4000,     // Delay for Safari (default: 4000ms)
+  baseDelay: 2000,       // Base delay in milliseconds for Chrome/Edge (default: 1000ms)
+  firefoxDelay: 4000,    // Delay for Firefox (default: 1500ms)
+  safariDelay: 4000,     // Delay for Safari (default: 1500ms)
   maxAttempts: 5,        // Default max attempts for Chrome/Edge/Firefox (default: 5)
   safariMaxAttempts: 6   // Max attempts for Safari (default: 6)
 };

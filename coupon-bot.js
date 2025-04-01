@@ -1,6 +1,26 @@
 // Cross-browser compatible JavaScript for the BJ's Wholesale Coupon Bot
 (() => {
-  console.log('Starting BJs Wholesale Coupon Bot...');
+  // Default configuration parameters
+  const defaultConfig = {
+    baseDelay: 1000, // Base delay in milliseconds for Chrome/Edge
+    firefoxDelay: 1500, // Delay for Firefox
+    safariDelay: 1500, // Delay for Safari
+    maxAttempts: 5, // Default max attempts
+    safariMaxAttempts: 6 // Max attempts for Safari
+  };
+
+  // Configurable parameters - merged with defaults to handle undefined/null values
+  // This allows partial configuration through customConfig in the console
+  const config = {
+    baseDelay: typeof window.customConfig?.baseDelay === 'number' ? window.customConfig.baseDelay : defaultConfig.baseDelay,
+    firefoxDelay: typeof window.customConfig?.firefoxDelay === 'number' ? window.customConfig.firefoxDelay : defaultConfig.firefoxDelay,
+    safariDelay: typeof window.customConfig?.safariDelay === 'number' ? window.customConfig.safariDelay : defaultConfig.safariDelay,
+    maxAttempts: typeof window.customConfig?.maxAttempts === 'number' ? window.customConfig.maxAttempts : defaultConfig.maxAttempts,
+    safariMaxAttempts: typeof window.customConfig?.safariMaxAttempts === 'number' ? window.customConfig.safariMaxAttempts : defaultConfig.safariMaxAttempts
+  };
+
+  console.log('Starting BJs Wholesale Coupon Bot with the following configuration:');
+  console.log(JSON.stringify(config, null, 2));
 
   // Browser detection for compatibility
   const getBrowser = () => {
@@ -56,8 +76,16 @@
         button.scrollIntoView(true);
       }
       
-      // Safari and Firefox might need additional time
-      const delayTime = browser === 'safari' || browser === 'firefox' ? 4000 : 3000;
+      // Use browser-specific delay from config
+      let delayTime;
+      if (browser === 'firefox') {
+        delayTime = config.firefoxDelay;
+      } else if (browser === 'safari') {
+        delayTime = config.safariDelay;
+      } else {
+        delayTime = config.baseDelay;
+      }
+      
       await sleep(delayTime);
       
       return true;
@@ -67,17 +95,16 @@
     }
   };
 
-  // Find all eligible coupon buttons with cross-browser compatibility
+  // Find all eligible coupon buttons
   const findCouponButtons = () => {
     // Try getElementsByName first (more reliable in most browsers)
     let buttons = document.getElementsByName('clipToCard');
     
-    // If no buttons found, try alternative selectors based on browser
+    // If no buttons found, try alternative selectors
     if (!buttons || buttons.length === 0) {
-      // Try by class or text content - common fallback approaches
       buttons = Array.from(document.querySelectorAll('button')).filter(btn => {
         const text = btn.textContent.trim().toLowerCase();
-        return text === 'clip' || text.includes('clip coupon') || text.includes('clip digital coupon');
+        return text === 'clip' || text.includes('clip coupon');
       });
       
       // If still no results, try other common attributes
@@ -121,13 +148,14 @@
   const run = async () => {
     let complete = false;
     let attempts = 0;
-    const maxAttempts = browser === 'safari' ? 6 : 5; // Safari might need more attempts
+    // Use the appropriate maxAttempts value from config based on browser
+    const maxAttempts = browser === 'safari' ? config.safariMaxAttempts : config.maxAttempts;
     
     while (!complete && attempts < maxAttempts) {
       attempts++;
-      console.log(`Attempt ${attempts}...`);
+      console.log(`Attempt ${attempts}/${maxAttempts}...`);
       complete = await processAllButtons();
-      await sleep(3000);
+      await sleep(config.baseDelay); // Use config for between-attempts delay
     }
     
     console.log('Bot execution completed.');

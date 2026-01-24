@@ -1,10 +1,37 @@
 # BJs Wholesale Coupon Bot
 
-An automated tool to clip all available coupons on your BJ's Wholesale account with a single click.
+An automated tool to clip all available coupons on your BJ's Wholesale account with a single click. **Now works on iPhone Safari!**
 
 ![Clip Coupons](clip-coupons.gif)
 
 ## Instructions
+
+### Option A: iPhone Safari (Using iOS Shortcuts)
+
+**Perfect for clipping coupons on the go from your iPhone!**
+
+1. **One-time setup**: Create a new iOS Shortcut
+   - Open the **Shortcuts** app on your iPhone
+   - Tap the **+** button to create a new shortcut
+   - Search for and add the **"Run JavaScript on Webpage"** action
+   - Copy the entire contents from [coupon-bot-ios.js](./coupon-bot-ios.js) and paste it into the script field
+   - Give your shortcut a name like "Clip BJ's Coupons"
+   - Tap **Done** to save
+   
+2. **Using the shortcut**:
+   - Open Safari on your iPhone and go to https://www.bjs.com/myCoupons
+   - Sign in to your BJ's Wholesale account
+   - Tap the Share button (square with arrow pointing up)
+   - Scroll down and select your "Clip BJ's Coupons" shortcut
+   - Wait for the script to complete (you'll see coupons being clipped automatically)
+   
+**Tips for iOS**:
+- Make sure you're signed into BJ's before running the shortcut
+- The script may need to run multiple times if you have many coupons
+- You can rerun the shortcut immediately if some coupons remain
+- For more details on iOS Shortcuts, see: https://support.apple.com/guide/shortcuts/use-the-run-javascript-on-webpage-action-apdb71a01d93/ios
+
+### Option B: Desktop Browser (Console Method)
 
 1. Open https://www.bjs.com/myCoupons in your browser
 2. Sign in to your BJ's Wholesale account
@@ -53,9 +80,10 @@ The bot will automatically:
 
 ## Browser Compatibility Notes
 
+- **iPhone Safari (iOS Shortcuts)**: Fully supported! Use the iOS-specific version (coupon-bot-ios.js) with the Shortcuts app.
 - **Chrome/Edge**: Fully supported with smooth scrolling.
 - **Firefox**: Supported with adjusted timing for proper coupon clipping.
-- **Safari**: Supported with alternative scrolling behavior and extended timing.
+- **Safari (Desktop)**: Supported with alternative scrolling behavior and extended timing.
 
 ## How It Works
 

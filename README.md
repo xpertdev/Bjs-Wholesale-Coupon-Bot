@@ -31,6 +31,11 @@ An automated tool to clip all available coupons on your BJ's Wholesale account w
 - You can rerun the shortcut immediately if some coupons remain
 - For more details on iOS Shortcuts, see: https://support.apple.com/guide/shortcuts/use-the-run-javascript-on-webpage-action-apdb71a01d93/ios
 
+**Customizing iOS version** (optional):
+If you need to adjust the speed, edit the script before pasting into Shortcuts:
+- Find `baseDelay: 1500` and change to a higher value (e.g., `2500`) for slower/more reliable clipping
+- Find `maxAttempts: 6` and change to a higher value if you have many coupons
+
 ### Option B: Desktop Browser (Console Method)
 
 1. Open https://www.bjs.com/myCoupons in your browser

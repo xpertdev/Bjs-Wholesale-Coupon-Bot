@@ -18,7 +18,7 @@
     maxAttempts: typeof window.customConfig?.maxAttempts === 'number' ? window.customConfig.maxAttempts : defaultConfig.maxAttempts
   };
 
-  console.log('Starting BJs Wholesale Coupon Bot (iOS Version)');
+  console.log('Starting BJ\'s Wholesale Coupon Bot (iOS Version)');
   console.log('Configuration:', JSON.stringify(config, null, 2));
 
   // Detect if running in iOS Shortcuts context

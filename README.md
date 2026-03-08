@@ -43,7 +43,7 @@ fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/
   .then(eval);
 ```
 
-> If you prefer, you can copy the entire contents of `coupon-bot.js` (in this repo) and paste that instead. Both methods do the same thing.
+> If you prefer, you can copy the entire contents of [`coupon-bot.js`](./coupon-bot.js) (in this repo) and paste that instead. Both methods do the same thing.
 
 4. The bot will show a small floating button and begin clipping coupons automatically. You can keep using the page while it runs.
 5. When the bot finishes, you can close the console or run the same command again if any coupons were missed (just press the **up arrow** in the console to recall it).
@@ -80,7 +80,7 @@ If you use the iOS **Shortcuts** app, you can set up a shortcut to run the scrip
    })();
    ```
 
-   Alternatively, if you prefer to embed everything, paste the **entire contents** of `coupon-bot.js` and it will work without the wrapper.
+   Alternatively, if you prefer to embed everything, paste the **entire contents** of [`coupon-bot.js`](./coupon-bot.js) and it will work without the wrapper.
 3. (Optional) Add an **"Open URLs"** action pointing to `https://www.bjs.com/myCoupons`.
 4. Enable **Show in Share Sheet** for Safari and save.
 
@@ -109,5 +109,3 @@ This tool is known to work on several sites including the following:
 
 - **BJ's Wholesale Club**: https://www.bjs.com/myCoupons
 - **Harris Teeter**: https://www.harristeeter.com/savings/cl/coupons/
-
-Feel free to report other sites that behave similarly.

@@ -9,8 +9,6 @@
 if (typeof completion !== 'function') {
   window.completion = function() {};
 }
-// immediately signal completion so the action won't throw an error later
-try { completion('done'); } catch {}
 
 // run the bot logic on the next tick to allow the shortcut to terminate
 setTimeout(async () => {

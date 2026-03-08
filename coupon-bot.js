@@ -1,16 +1,61 @@
 // Cross-browser compatible JavaScript for the BJ's Wholesale Coupon Bot
+// This script supports desktop browsers as well as iOS Shortcuts.
+// When used in Shortcuts ("Run JavaScript on Webpage"), it will signal
+// completion and show a message so the user knows it ran.
 (() => {
-  // Default configuration parameters
-  const defaultConfig = {
-    baseDelay: 1000, // Base delay in milliseconds for Chrome/Edge
-    firefoxDelay: 1500, // Delay for Firefox
-    safariDelay: 1500, // Delay for Safari
-    maxAttempts: 5, // Default max attempts
-    safariMaxAttempts: 6 // Max attempts for Safari
+  // ----- environment helpers -----
+  // detect if we're running in iOS Shortcuts context (completion callback)
+  const isIOSShortcuts = typeof completion === 'function';
+
+  // logging helper - currently only writes to console.  UI log box was
+  // removed to keep the screen clean; the page already shows buttons
+  // disappearing as they are clipped.
+  const log = (...args) => {
+    console.log(...args);
   };
 
-  // Configurable parameters - merged with defaults to handle undefined/null values
-  // This allows partial configuration through customConfig in the console
+  // final message reporting; on iOS we call completion (and catch errors),
+  // otherwise display an alert so the user sees something happened
+  const reportDone = (message) => {
+    log(message);
+    if (isIOSShortcuts) {
+      try {
+        completion(message);
+      } catch (e) {
+        console.error('Error calling completion():', e);
+      }
+    } else {
+      // show an alert in the page so non‑IOS users also get feedback
+      try {
+        alert(message);
+      } catch (e) {
+        /* ignore if alerts are disabled */
+      }
+    }
+  };
+
+  // simple global error catcher
+  window.addEventListener('error', e => {
+    log('Unhandled error:', e.message);
+    reportDone('Error occurred - check console');
+  });
+
+  // Default configuration parameters.  We pick slightly different
+  // defaults depending on environment; iOS Shortcut runs tend to be
+  // slower and require more attempts, so we bump the numbers when
+  // `isIOSShortcuts` is true.
+  const defaultConfig = {
+    baseDelay: 1500, // uniform default delay in milliseconds for all environments
+    firefoxDelay: 1500, // Delay for Firefox (ignores isIOS because iOS uses Safari APIs)
+    safariDelay: 1500,
+    maxAttempts: isIOSShortcuts ? 6 : 5, // allow extra rounds on mobile
+    safariMaxAttempts: 6
+  };
+
+  // Configurable parameters - merge provided settings with defaults.  We
+  // support all of the options previously exposed in both desktop and iOS
+  // versions; mobile (iOS Shortcut) will ignore the browser-specific fields
+  // but it's harmless to include them.
   const config = {
     baseDelay: typeof window.customConfig?.baseDelay === 'number' ? window.customConfig.baseDelay : defaultConfig.baseDelay,
     firefoxDelay: typeof window.customConfig?.firefoxDelay === 'number' ? window.customConfig.firefoxDelay : defaultConfig.firefoxDelay,
@@ -27,7 +72,8 @@
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.indexOf('firefox') > -1) return 'firefox';
     if (userAgent.indexOf('safari') > -1 && userAgent.indexOf('chrome') === -1) return 'safari';
-    if (userAgent.indexOf('edge') > -1) return 'edge';
+    // modern Edge uses "Edg" in the UA (lowercased to "edg/") so include that
+    if (userAgent.indexOf('edge') > -1 || userAgent.indexOf('edg/') > -1) return 'edge';
     return 'chrome'; // Default or Chrome
   };
   
@@ -37,45 +83,72 @@
   // Modern sleep implementation using Promises
   const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-  // Cross-browser safe click function
+  // Cross-browser/mobile safe click function.  On iOS Safari a simple
+  // programmatic click on an off-screen element often does nothing, plus
+  // some coupon buttons are implemented using touch events or pointer events.
+  // We build up a set of fallbacks to maximise reliability.
   const safeClick = (element) => {
+    const dispatch = (evt) => {
+      try { element.dispatchEvent(evt); } catch {};
+    };
+
+    // 1. try the convenient DOM API
     try {
-      // Try standard click first
       element.click();
-    } catch (error) {
-      // Fallback for older browsers: create and dispatch click event
-      try {
-        const evt = new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: true
-        });
-        element.dispatchEvent(evt);
-      } catch (fallbackError) {
-        // Ultimate fallback for very old browsers
-        const evt = document.createEvent('MouseEvents');
-        evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-        element.dispatchEvent(evt);
-      }
-    }
+      return;
+    } catch (_e) {}
+
+    // 2. try a MouseEvent
+    try {
+      const evt = new MouseEvent('click', {view: window, bubbles: true, cancelable: true});
+      dispatch(evt);
+      return;
+    } catch (_e) {}
+
+    // 3. try pointer events (some newer mobile frameworks use them)
+    try {
+      const pEvt = new PointerEvent('pointerdown', {bubbles: true, cancelable: true});
+      dispatch(pEvt);
+      const pUp = new PointerEvent('pointerup', {bubbles: true, cancelable: true});
+      dispatch(pUp);
+      return;
+    } catch (_e) {}
+
+    // 4. try touch events
+    try {
+      const t0 = new TouchEvent('touchstart', {bubbles: true, cancelable: true});
+      dispatch(t0);
+      const t1 = new TouchEvent('touchend', {bubbles: true, cancelable: true});
+      dispatch(t1);
+      return;
+    } catch (_e) {}
+
+    // 5. ultimate fallback for very old browsers
+    try {
+      const evt = document.createEvent('MouseEvents');
+      evt.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+      dispatch(evt);
+    } catch (_e) {}
   };
 
   // Process one button at a time to prevent race conditions
+  // Scroll the element into view *before* clicking; mobile browsers often
+  // ignore programmatic clicks on off‑screen elements.
   const processButton = async (button) => {
     try {
-      console.log('Clipping coupon...');
-      
-      // Use our cross-browser click method
-      safeClick(button);
-      
-      // Cross-browser safe scrolling
+      // console feedback only; not shown on screen
+      log('Clipping coupon...');
+
+      // button visibility and clicking only; no per-button logging since the
+      // UI already shows items disappearing when they are clipped
       try {
         button.scrollIntoView({behavior: browser === 'safari' ? 'auto' : 'smooth', block: 'center'});
       } catch (scrollError) {
-        // Fallback scrolling for older browsers
-        button.scrollIntoView(true);
+        try { button.scrollIntoView(true); } catch {};
       }
-      
+
+      safeClick(button);
+
       // Use browser-specific delay from config
       let delayTime;
       if (browser === 'firefox') {
@@ -85,9 +158,8 @@
       } else {
         delayTime = config.baseDelay;
       }
-      
+
       await sleep(delayTime);
-      
       return true;
     } catch (error) {
       console.error('Error processing button:', error);
@@ -95,25 +167,34 @@
     }
   };
 
-  // Find all eligible coupon buttons
+  // Find all eligible coupon buttons.  We try a sequence of selectors
+  // rather than relying on a single strategy so that changes on the site
+  // are less likely to break the bot.
   const findCouponButtons = () => {
-    // Try getElementsByName first (more reliable in most browsers)
-    let buttons = document.getElementsByName('clipToCard');
-    
-    // If no buttons found, try alternative selectors
-    if (!buttons || buttons.length === 0) {
-      buttons = Array.from(document.querySelectorAll('button')).filter(btn => {
-        const text = btn.textContent.trim().toLowerCase();
-        return text === 'clip' || text.includes('clip coupon');
-      });
-      
-      // If still no results, try other common attributes
-      if (!buttons || buttons.length === 0) {
-        buttons = document.querySelectorAll('[data-automation-id="clipCoupon"], .clip-coupon-btn, .coupon-clip-btn');
-      }
-    }
-    
-    return buttons;
+    const found = new Set();
+
+    const addElements = (els) => {
+      if (!els) return;
+      Array.from(els).forEach(el => found.add(el));
+    };
+
+    // 1. name attribute (the most reliable historically)
+    addElements(document.getElementsByName('clipToCard'));
+
+    // 2. look for buttons/links with obvious text
+    const textElems = Array.from(document.querySelectorAll('button, a')).filter(el => {
+      const text = el.textContent.trim().toLowerCase();
+      return text === 'clip' || text.includes('clip coupon');
+    });
+    addElements(textElems);
+
+    // 3. some variations of class or data attributes
+    addElements(document.querySelectorAll(
+      '[data-automation-id="clipCoupon"], .clip-coupon-btn, .coupon-clip-btn, [data-clip], [aria-label*="clip coupon"]'
+    ));
+
+    // return as an array for ease of use
+    return Array.from(found);
   };
 
   // Main function to process all buttons
@@ -159,6 +240,9 @@
     }
     
     console.log('Bot execution completed.');
+    // Provide consistent user feedback across environments
+    reportDone('Bot execution completed.');
+    return true;
   };
 
   // Start the process

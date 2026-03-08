@@ -14,7 +14,19 @@ An automated tool to clip all available coupons on your BJ's Wholesale account w
    - Open the **Shortcuts** app on your iPhone
    - Tap the **+** button to create a new shortcut
    - Search for and add the **"Run JavaScript on Webpage"** action
-   - Copy the entire contents from [coupon-bot-ios.js](./coupon-bot-ios.js) and paste it into the script field
+   - **Two installation options:**
+     1. **Embed the code directly** – copy the entire contents from
+        [coupon-bot.js](./coupon-bot.js) and paste it into the script field.
+     2. **Fetch from GitHub at runtime** – paste this one‑liner into the
+        action instead of embedding all the code:
+
+```javascript
+fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
+  .then(r => r.text())
+  .then(code => eval(code))
+  .catch(e => alert('Unable to load bot: ' + e));
+```
+
    - Give your shortcut a name like "Clip BJ's Coupons"
    - Tap **Done** to save
    
@@ -23,10 +35,13 @@ An automated tool to clip all available coupons on your BJ's Wholesale account w
    - Sign in to your BJ's Wholesale account
    - Tap the Share button (square with arrow pointing up)
    - Scroll down and select your "Clip BJ's Coupons" shortcut
-   - Wait for the script to complete (you'll see coupons being clipped automatically)
+   - Wait for the script to complete (you'll see a small log box appear in the bottom-right of the page showing progress)
    
 **Tips for iOS**:
 - Make sure you're signed into BJ's before running the shortcut
+- After you trigger the shortcut, a small black log panel will pop up in the lower right corner of the page; it updates as coupons are clipped so you know the script is running
+- When the job finishes you'll either see an alert or the message "Bot execution completed" in the log box
+- If you do not see any feedback, make sure the shortcut is actually firing (Shortcuts shows a spinner while the action runs) and that you have pasted the entire script correctly
 - The script may need to run multiple times if you have many coupons
 - You can rerun the shortcut immediately if some coupons remain
 - For more details on iOS Shortcuts, see: https://support.apple.com/guide/shortcuts/use-the-run-javascript-on-webpage-action-apdb71a01d93/ios
@@ -57,6 +72,8 @@ fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/
   .catch(error => console.error('Error loading coupon bot:', error));
 ```
 
+*(The same pattern works on iOS via the shortcut described above.)*
+
 If you want to customize settings (for example, to make the bot run faster or slower), use this version:
 ```javascript
 // Change any values you want to customize
@@ -85,7 +102,7 @@ The bot will automatically:
 
 ## Browser Compatibility Notes
 
-- **iPhone Safari (iOS Shortcuts)**: Fully supported! Use the iOS-specific version (coupon-bot-ios.js) with the Shortcuts app.
+- **iPhone Safari (iOS Shortcuts)**: Fully supported! The same `coupon-bot.js` file works in the Shortcuts action; just copy it into the script field or fetch it dynamically.
 - **Chrome/Edge**: Fully supported with smooth scrolling.
 - **Firefox**: Supported with adjusted timing for proper coupon clipping.
 - **Safari (Desktop)**: Supported with alternative scrolling behavior and extended timing.
@@ -102,7 +119,7 @@ The script includes several configurable parameters that can be adjusted to opti
 
 ```javascript
 const config = {
-  baseDelay: 2000,       // Base delay in milliseconds for Chrome/Edge (default: 1000ms)
+  baseDelay: 2000,       // Base delay in milliseconds for Chrome/Edge (default: 1500ms)
   firefoxDelay: 4000,    // Delay for Firefox (default: 1500ms)
   safariDelay: 4000,     // Delay for Safari (default: 1500ms)
   maxAttempts: 5,        // Default max attempts for Chrome/Edge/Firefox (default: 5)

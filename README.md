@@ -14,6 +14,14 @@ An automated tool to clip all available coupons on your BJ's Wholesale account w
    - Open the **Shortcuts** app on your iPhone
    - Tap the **+** button to create a new shortcut
    - Search for and add the **"Run JavaScript on Webpage"** action
+
+> ⚠️ **Important:** the Run JavaScript on Webpage action only works when
+> Safari has a webpage open. You must invoke the shortcut from the share
+> sheet while on the BJ's Coupons page (or have the shortcut open that page
+> first). Tapping the shortcut’s icon directly from the home screen without
+> a webpage will trigger the "script must call completion" error because no
+> page context is available.
+
    - **Two installation options:**
      1. **Embed the code directly** – copy the entire contents from
         [coupon-bot.js](./coupon-bot.js) and paste it into the script field.
@@ -22,9 +30,9 @@ An automated tool to clip all available coupons on your BJ's Wholesale account w
 
 ```javascript
 fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
-  .then(r => r.text())
+  .then(response => response.text())
   .then(code => eval(code))
-  .catch(e => alert('Unable to load bot: ' + e));
+  .catch(error => console.error('Error loading coupon bot:', error));
 ```
 
    - Give your shortcut a name like "Clip BJ's Coupons"
@@ -40,6 +48,7 @@ fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/
 **Tips for iOS**:
 - Make sure you're signed into BJ's before running the shortcut
 - After you trigger the shortcut, the page itself will update as buttons disappear. There is no persistent log box.
+- The script defines a no‑op `completion()` if none exists and then calls `completion('done')` at the start. That prevents the "must call completion" error whether or not a webpage is open, and it allows the clipping logic to continue running in the background.
 - When the job finishes you'll see an alert (or the Shortcut action will return a completion message).
 - If you do not see any feedback, make sure the shortcut is actually firing (Shortcuts shows a spinner while the action runs) and that you have pasted the entire script correctly
 - The script may need to run multiple times if you have many coupons

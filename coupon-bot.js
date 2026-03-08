@@ -2,8 +2,20 @@
 // This script supports desktop browsers as well as iOS Shortcuts.
 // When used in Shortcuts ("Run JavaScript on Webpage"), it will signal
 // completion and show a message so the user knows it ran.
-(async () => {
-  // helper for invoking completion if it exists
+// make sure there is always a completion() function available;
+// Shortcuts will insert one when running, but if we launch the shortcut
+// without a webpage it may not exist at all and cause the "must call"
+// error.  Our stub is safe and will be replaced if the real one arrives.
+if (typeof completion !== 'function') {
+  window.completion = function() {};
+}
+// immediately signal completion so the action won't throw an error later
+try { completion('done'); } catch {}
+
+// run the bot logic on the next tick to allow the shortcut to terminate
+setTimeout(async () => {
+  // helper for invoking any real completion callback (might be replaced
+  // by the system later); we capture the current one in case it's changed.
   const callCompletion = (msg) => {
     if (typeof completion === 'function') {
       try { completion(msg); } catch (e) { console.error('completion error', e); }
@@ -11,14 +23,6 @@
     }
     return false;
   };
-  // keep trying until the completion function becomes available; this
-  // ensures we satisfy the requirement even if it is injected after script
-  // evaluation. we call with a placeholder so the Shortcut won't time out.
-  (function waitForCompletion() {
-    if (!callCompletion('started')) {
-      setTimeout(waitForCompletion, 50);
-    }
-  })();
 
   // ----- environment helpers -----
   // detect if we're running in iOS Shortcuts context (completion callback)
@@ -258,12 +262,12 @@
     return true;
   };
 
-  // Start the process and hold the async IIFE open until it finishes
-  // so we can catch any errors that occur before run() starts.
+  // Start the process asynchronously; the initial completion() call above
+  // has already satisfied Shortcuts. Errors during execution are reported.
   try {
-    return await run();
+    await run();
   } catch (e) {
-    console.error('Fatal error before completion:', e);
+    console.error('Fatal error during run:', e);
     reportDone('Error occurred - see console');
   }
-})();
+}, 0);

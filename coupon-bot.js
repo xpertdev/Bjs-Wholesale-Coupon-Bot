@@ -2,25 +2,17 @@
 (() => {
   // Default configuration parameters
   const defaultConfig = {
-    baseDelay: 1500, // Base delay in milliseconds for Chrome/Edge
-    firefoxDelay: 1500, // Delay for Firefox
-    safariDelay: 1500, // Delay for Safari
-    maxAttempts: 5, // Default max attempts
-    safariMaxAttempts: 6 // Max attempts for Safari
+    baseDelay: 1500, // delay between clicks in milliseconds
+    maxAttempts: 5   // how many times to sweep the page before giving up
   };
 
-  // Configurable parameters - merged with defaults to handle undefined/null values
-  // This allows partial configuration through customConfig in the console
+  // Merge user overrides (window.customConfig may contain baseDelay and/or maxAttempts)
   const config = {
     baseDelay: typeof window.customConfig?.baseDelay === 'number' ? window.customConfig.baseDelay : defaultConfig.baseDelay,
-    firefoxDelay: typeof window.customConfig?.firefoxDelay === 'number' ? window.customConfig.firefoxDelay : defaultConfig.firefoxDelay,
-    safariDelay: typeof window.customConfig?.safariDelay === 'number' ? window.customConfig.safariDelay : defaultConfig.safariDelay,
-    maxAttempts: typeof window.customConfig?.maxAttempts === 'number' ? window.customConfig.maxAttempts : defaultConfig.maxAttempts,
-    safariMaxAttempts: typeof window.customConfig?.safariMaxAttempts === 'number' ? window.customConfig.safariMaxAttempts : defaultConfig.safariMaxAttempts
+    maxAttempts: typeof window.customConfig?.maxAttempts === 'number' ? window.customConfig.maxAttempts : defaultConfig.maxAttempts
   };
 
-  console.log('Starting BJs Wholesale Coupon Bot with the following configuration:');
-  console.log(JSON.stringify(config, null, 2));
+  console.log('Starting BJs Wholesale Coupon Bot with configuration:', config);
 
   // Browser detection for compatibility (desktop & mobile)
   const getBrowser = () => {
@@ -101,17 +93,8 @@
         button.scrollIntoView(true);
       }
       
-      // Use browser-specific delay from config
-      let delayTime;
-      if (browser === 'firefox') {
-        delayTime = config.firefoxDelay;
-      } else if (browser === 'safari') {
-        delayTime = config.safariDelay;
-      } else {
-        delayTime = config.baseDelay;
-      }
-      
-      await sleep(delayTime);
+      // use the single delay value for all browsers
+      await sleep(config.baseDelay);
       
       return true;
     } catch (error) {
@@ -179,14 +162,14 @@
   const run = async () => {
     let complete = false;
     let attempts = 0;
-    // Use the appropriate maxAttempts value from config based on browser
-    const maxAttempts = browser === 'safari' ? config.safariMaxAttempts : config.maxAttempts;
+    // only one maxAttempts value now
+    const maxAttempts = config.maxAttempts;
     
     while (!complete && attempts < maxAttempts) {
       attempts++;
       console.log(`Attempt ${attempts}/${maxAttempts}...`);
       complete = await processAllButtons();
-      await sleep(config.baseDelay); // Use config for between-attempts delay
+      await sleep(config.baseDelay); // use same delay between sweeps
     }
     
     console.log('Bot execution completed.');

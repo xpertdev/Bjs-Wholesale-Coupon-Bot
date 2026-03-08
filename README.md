@@ -64,7 +64,7 @@ javascript:(function(){fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Who
 
 3. Go to **https://www.bjs.com/myCoupons** and tap the bookmark. The bot will load and clip coupons without opening any menus.
 
-### iOS Shortcuts (optional)
+### iOS Shortcuts
 
 If you use the iOS **Shortcuts** app, you can set up a shortcut to run the script automatically:
 

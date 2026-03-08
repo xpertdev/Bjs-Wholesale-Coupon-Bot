@@ -39,14 +39,22 @@ fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/
   .catch(error => console.error('Error loading coupon bot:', error));
 ```
 
+> **Tip for mobile users:** copy the link above and create a bookmark on your phone. Edit the bookmark and replace the URL with the following *bookmarklet* code. When you navigate to the coupons page, just tap the bookmark to run the bot without ever opening the console.
+>
+> ```javascript
+> javascript:(function(){fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js').then(r=>r.text()).then(eval);})();
+> ```
+> (It’s plain vanilla JS – no server or Node dependencies – so it works in Safari iOS, Chrome Android, desktop browsers, etc.)
+
 ### Option 2: Copy Full Code
 Copy the contents from the [coupon-bot.js](./coupon-bot.js) file and paste it into the console.
 
 The bot will automatically:
-- Detect your browser type and adjust functionality accordingly
-- Find all available coupons on the page using multiple detection methods
-- Click each "Clip" button one by one with cross-browser compatible methods
-- Scroll each coupon into view as it's clipped
+- Detect your browser type (including mobile Safari/Chrome) and adjust functionality accordingly
+- Inject a small floating "Clip All Coupons" button in the corner so you can start it with a tap on any device
+- Find all available coupons on the page using multiple detection methods (buttons and links)
+- Scroll through the page/container to load lazily‑loaded coupons
+- Click each "Clip" control one by one with cross-browser compatible methods (including touch events)
 - Continue until all coupons are clipped or maximum attempts are reached
 
 > **Note:** If some coupons remain unclipped after the script finishes, you may need to run it again. Simply press the up arrow in the console to recall the previous command and press Enter to execute it again.
@@ -56,6 +64,32 @@ The bot will automatically:
 - **Chrome/Edge**: Fully supported with smooth scrolling.
 - **Firefox**: Supported with adjusted timing for proper coupon clipping.
 - **Safari**: Supported with alternative scrolling behavior and extended timing.
+
+### iOS Shortcuts App (Safari)
+
+You can run the script from an iPhone or iPad using the built-in **Shortcuts** application without manually opening the console.
+
+1. Open the **Shortcuts** app and create a new shortcut.
+2. Add the action **"Run JavaScript on Web Page"** (under Safari actions).
+3. In the text field paste one of the following (bookmarklet-style) snippets:
+
+   ```javascript
+   fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
+     .then(r => r.text())
+     .then(eval);
+   ```
+
+   or, if you prefer to embed the code directly, paste the entire contents of `coupon-bot.js`.
+
+4. Add another action **"Open URLs"** if you want the shortcut to automatically navigate to
+   `https://www.bjs.com/myCoupons` first.
+5. Enable **Show in Share Sheet** (optional) and restrict to Safari if desired.
+6. Save the shortcut with a descriptive name such as "BJ’s Clip Coupons".
+
+Now, when you are on the coupons page in Safari, open the share sheet and tap your shortcut. The JavaScript will execute on the page and the floating "Clip All Coupons" button appears, or it will run immediately if you embedded the script.
+
+> **Note:** No modifications to the core script are required for Shortcuts. It already
+> runs in the Safari JavaScript context. The bookmarklet/thumbtack code above is all you need.
 
 ## How It Works
 

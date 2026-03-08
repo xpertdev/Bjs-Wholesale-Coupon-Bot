@@ -88,9 +88,21 @@ Now you can tap the shortcut from Safari’s share menu while on the coupons pag
 
 ---
 
-## How It Works (Very Brief)
+## How It Works
 
 The script clicks every “clip” button it finds, scrolling if necessary so all coupons load. It adjusts itself for different browsers and will retry a few times if something fails. No server or extra software is involved – everything runs inside your browser.
+
+---
+
+## Why This Tool Exists
+
+Many grocery and wholesale club websites offer digital coupons, but the process of clipping these coupons is often frustrating. Ideally, digital coupons should be automatically applied at checkout, similar to Costco Wholesale, eliminating the need for manual clipping. However, due to poor user experience, this tool was created to address the following issues:
+
+- Manually clicking dozens (or even hundreds) of individual "clip" buttons is tedious and time-consuming.
+- Websites often load slowly between clicks, further complicating the process.
+- It's easy to overlook coupons that could save you money.
+
+This bot automates the entire process, saving you time and ensuring you don't miss out on any potential savings.
 
 ---
 

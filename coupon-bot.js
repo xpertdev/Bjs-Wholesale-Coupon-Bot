@@ -14,18 +14,18 @@
     console.log(...args);
   };
 
-  // final message reporting; on iOS we call completion (and catch errors),
-  // otherwise display an alert so the user sees something happened
+  // final message reporting; if completion() exists we call it directly
+  // each time instead of relying on the cached isIOSShortcuts flag, because
+  // Shortcuts may inject it late.  The fallback is an alert for browsers.
   const reportDone = (message) => {
     log(message);
-    if (isIOSShortcuts) {
+    if (typeof completion === 'function') {
       try {
         completion(message);
       } catch (e) {
         console.error('Error calling completion():', e);
       }
     } else {
-      // show an alert in the page so non‑IOS users also get feedback
       try {
         alert(message);
       } catch (e) {
@@ -37,6 +37,11 @@
   // simple global error catcher
   window.addEventListener('error', e => {
     log('Unhandled error:', e.message);
+    reportDone('Error occurred - check console');
+  });
+  // also catch unhandled promise rejections which may not trigger window.onerror
+  window.addEventListener('unhandledrejection', e => {
+    log('Unhandled rejection:', e.reason);
     reportDone('Error occurred - check console');
   });
 
@@ -245,6 +250,7 @@
     return true;
   };
 
-  // Start the process
-  run();
+  // Start the process and hold the async IIFE open until it finishes
+  // so Shortcuts can observe the completion() call before the script ends.
+  return await run();
 })();

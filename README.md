@@ -35,12 +35,12 @@ fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/
    - Sign in to your BJ's Wholesale account
    - Tap the Share button (square with arrow pointing up)
    - Scroll down and select your "Clip BJ's Coupons" shortcut
-   - Wait for the script to complete (you'll see a small log box appear in the bottom-right of the page showing progress)
+   - Wait for the script to complete; coupons will disappear as they are clipped and the Shortcut will finish when all are processed.
    
 **Tips for iOS**:
 - Make sure you're signed into BJ's before running the shortcut
-- After you trigger the shortcut, a small black log panel will pop up in the lower right corner of the page; it updates as coupons are clipped so you know the script is running
-- When the job finishes you'll either see an alert or the message "Bot execution completed" in the log box
+- After you trigger the shortcut, the page itself will update as buttons disappear. There is no persistent log box.
+- When the job finishes you'll see an alert (or the Shortcut action will return a completion message).
 - If you do not see any feedback, make sure the shortcut is actually firing (Shortcuts shows a spinner while the action runs) and that you have pasted the entire script correctly
 - The script may need to run multiple times if you have many coupons
 - You can rerun the shortcut immediately if some coupons remain

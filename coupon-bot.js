@@ -28,6 +28,13 @@ setTimeout(async () => {
   // detect if we're running in iOS Shortcuts context (completion callback)
   const isIOSShortcuts = typeof completion === 'function';
 
+  // ensure we're on the BJ's coupons page; if not, bail out early so the
+  // Shortcut doesn't run there without a webpage context.
+  if (typeof location !== 'undefined' && !location.href.includes('bjs.com/myCoupons')) {
+    reportDone('Please open BJ\'s coupons page and run the shortcut from the share sheet.');
+    return;
+  }
+
   // logging helper - currently only writes to console.  UI log box was
   // removed to keep the screen clean; the page already shows buttons
   // disappearing as they are clipped.

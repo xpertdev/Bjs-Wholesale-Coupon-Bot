@@ -72,7 +72,7 @@ When modifying `coupon-bot.js`:
 ## Known Limitations / Errors Encountered
 
 - **Touch API support varies by browser:** `new Touch(...)` is not supported in all browsers, so the `TouchEvent` path in `safeClick` is wrapped in its own try/catch and silently fails. This is intentional.
-- **Safari autoScroll behavior:** `scrollIntoView({ behavior: 'smooth' })` is unreliable in Safari, so `safeClick` uses `'auto'` for Safari and `'smooth'` for others.
+- **Safari scrollIntoView behavior:** `scrollIntoView({ behavior: 'smooth' })` is unreliable in Safari, so `processButton` uses `'auto'` for Safari and `'smooth'` for others.
 - **Lazy-loaded coupons:** `autoScroll` may not load all coupons on very long pages on the first pass. Increasing `maxAttempts` and re-running is the documented workaround.
 - **Site DOM changes:** If BJ's updates their HTML, `findCouponButtons()` selectors may need updating. The text-content fallback (`'clip'`, etc.) provides resilience.
 - **CSP restrictions:** Some browser environments or extensions may block `eval`. Users should paste the script directly in those cases.

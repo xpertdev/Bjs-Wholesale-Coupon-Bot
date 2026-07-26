@@ -29,7 +29,7 @@ The tool works in any modern browser on desktop or mobile – no download or ins
 
 ```javascript
 // simple version: runs the bot right away
-fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
+fetch('https://cdn.jsdelivr.net/gh/xpertdev/Bjs-Wholesale-Coupon-Bot@main/coupon-bot.js')
   .then(response => response.text())
   .then(code => eval(code))
   .catch(error => console.error('Error loading coupon bot:', error));
@@ -38,7 +38,7 @@ fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/
 ```javascript
 // same as above, but you can change how fast it runs or how many sweeps it makes
 window.customConfig = { baseDelay: 1800, maxAttempts: 6 };
-fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
+fetch('https://cdn.jsdelivr.net/gh/xpertdev/Bjs-Wholesale-Coupon-Bot@main/coupon-bot.js')
   .then(r => r.text())
   .then(eval);
 ```
@@ -59,7 +59,7 @@ fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/
 2. Edit the bookmark and replace its URL with the following code:
 
 ```javascript
-javascript:(function(){fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js').then(r=>r.text()).then(eval);})();
+javascript:(function(){fetch('https://cdn.jsdelivr.net/gh/xpertdev/Bjs-Wholesale-Coupon-Bot@main/coupon-bot.js').then(r=>r.text()).then(eval);})();
 ```
 
 3. Go to **https://www.bjs.com/myCoupons** and tap the bookmark. The bot will load and clip coupons without opening any menus.
@@ -74,7 +74,7 @@ If you use the iOS **Shortcuts** app, you can set up a shortcut to run the scrip
 
    ```javascript
    (async function(){
-     const src = await fetch('https://raw.githubusercontent.com/xpertdev/Bjs-Wholesale-Coupon-Bot/main/coupon-bot.js')
+     const src = await fetch('https://cdn.jsdelivr.net/gh/xpertdev/Bjs-Wholesale-Coupon-Bot@main/coupon-bot.js')
        .then(r=>r.text());
      eval(src);
    })();
